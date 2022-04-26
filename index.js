@@ -15,6 +15,9 @@ const io = new Server(httpServer, {
 
 app.use(express.static('public'));
 const PORT = process.env.PORT || 5000
+
+console.log("port is ",PORT)
+
 let M =0 , H =0 ,T =0 ;
 let motorStatus = 0; // 0 -> off , 1-> ON
 let M_ref = 0, H_ref = 0, T_ref=0;
@@ -22,7 +25,7 @@ let Precision = 4;
 let automaticControlMode = 0;
 let refValM = 0;
 
-//app.use(cors({origin:['192.168.1.83','http://192.168.1.83:3000']}));
+app.use(cors());
 
 io.on("connection", (socket) => {
 
