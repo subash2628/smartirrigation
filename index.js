@@ -2,7 +2,7 @@ const express = require("express");
 const { createServer } = require("http");
 const { Server } = require("socket.io");
 const cors = require('cors');
-const { writeDataToCsv,endWrite } = require('./csvFormat')
+//const { writeDataToCsv,endWrite } = require('./csvFormat')
 const app = express();
 
 const httpServer = createServer(app);
@@ -22,7 +22,7 @@ let Precision = 4;
 let automaticControlMode = 0;
 let refValM = 0;
 
-app.use(cors({origin:['192.168.1.83','http://192.168.1.83:3000']}));
+//app.use(cors({origin:['192.168.1.83','http://192.168.1.83:3000']}));
 
 io.on("connection", (socket) => {
 
