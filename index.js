@@ -2,7 +2,7 @@ const express = require("express");
 const { createServer } = require("http");
 const { Server } = require("socket.io");
 const cors = require('cors');
-//const { writeDataToCsv,endWrite } = require('./csvFormat')
+const { writeDataToCsv,endWrite } = require('./csvFormat')
 const app = express();
 
 const httpServer = createServer(app);
@@ -74,7 +74,7 @@ io.on("connection", (socket) => {
             //store in csv file
             if((M !== M_ref) || (H !== H_ref) || (T !== T_ref) )
             {
-                //writeDataToCsv(M,H,T,motorStatus);
+                writeDataToCsv(M,H,T,motorStatus);
             }
         }
         

@@ -2,3 +2,7 @@ node_modules
 csvFormat.js
 logisticRegression.js
 tmp.csv
+client/node_modules
+client/build
+client/.env
+client/.gitignore
