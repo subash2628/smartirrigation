@@ -1,4 +1,4 @@
-/*#include <Arduino.h>
+#include <Arduino.h>
 #include <ESP8266WiFi.h>
 #include <SocketIOclient.h>
 #include <ArduinoJson.h>
@@ -19,13 +19,18 @@ void displayHMT(float, float, float);
 SocketIOclient webSocket;
 
 //const char* ssid = "oppo";
-//const char* password = "12345678";
+//const char* password = "a11b22c33d44e55";
 
-const char* ssid = "Prakriti";
-const char* password = "#321@PrAkRiTi";
+//const char* ssid = "Prakriti";
+//const char* password = "#321@PrAkRiTi";
 
-//const char* ssid = "worldlink_fpkhr";
-//const char* password = "a1b2c3d4e5";
+const char* ssid = "worldlink_fpkhr";
+const char* password = "a1b2c3d4e5";
+
+//motor codes
+int ENA = D2;
+int IN1 = D5;
+int IN2 = D6;
 
 
 void socketIOEvent(socketIOmessageType_t type, uint8_t * payload, size_t length) {
@@ -55,12 +60,27 @@ void socketIOEvent(socketIOmessageType_t type, uint8_t * payload, size_t length)
                if(motorStatus == 1){
                digitalWrite(D1,HIGH);
                digitalWrite(LED_BUILTIN, LOW);
+               digitalWrite(IN1, HIGH);
+               digitalWrite(IN2, LOW);
              }
              else{
               digitalWrite(D1,LOW);
               digitalWrite(LED_BUILTIN, HIGH);
+              digitalWrite(IN1, LOW);
+              digitalWrite(IN2, LOW);
               }
             }
+
+           else if(event == "receive-motorSpeed-broadcast")
+           {
+            int motorSpeed = array[1];
+            Serial.println(motorSpeed);
+            analogWrite(ENA, motorSpeed);
+           }
+           else
+           {
+            Serial.printf("No Event Match \n");
+           }
             
             //for(JsonVariant v : array) {
             //    Serial.println(v.as<String>());
@@ -134,8 +154,8 @@ void setup() {
     
     //webSocket.begin("192.168.43.18",5000);
     //webSocket.begin("192.168.1.83",5000);
-    webSocket.begin("smart-irrigation2628.herokuapp.com",80);
-    //webSocket.begin("192.168.100.112",5000);
+    //webSocket.begin("smart-irrigation2628.herokuapp.com",80);
+    webSocket.begin("192.168.100.112",5000);
     //webSocket.begin("192.168.17.234",5000);
 
     Serial.print("connected to server : ");
@@ -143,11 +163,13 @@ void setup() {
 
     webSocket.onEvent(socketIOEvent);
 
-    //Serial.println("setupMotor");
-    //setupMotor();
-
-    
-     
+    //motor setup 
+    pinMode(ENA, OUTPUT);
+    pinMode(IN1, OUTPUT);
+    pinMode(IN2, OUTPUT);
+    analogWrite(ENA, 0);
+    digitalWrite(IN1, LOW);
+    digitalWrite(IN2, LOW);
 }
 uint64_t now;
 unsigned long messageTimestamp = 0;
@@ -189,56 +211,63 @@ void loop() {
             // Print JSON for debugging
             //USE_SERIAL.println(output);
         }
-}*/
+}
 
+/*
 int ENA = D2;
-int ENB = D4;
+//int ENB = D4;
 int IN1 = D5;
 int IN2 = D6;
-int IN4 = D7;
-int IN3 = D8;
+//int IN4 = D7;
+//int IN3 = D8;
 
 void setup() {
+  Serial.begin(115200);
   pinMode(ENA, OUTPUT);
-  pinMode(ENB, OUTPUT);
+  //pinMode(ENB, OUTPUT);
   pinMode(IN1, OUTPUT);
   pinMode(IN2, OUTPUT);
-  pinMode(IN3, OUTPUT);
-  pinMode(IN4, OUTPUT); 
+  //pinMode(IN3, OUTPUT);
+  //pinMode(IN4, OUTPUT); 
   digitalWrite(IN1, LOW);
   digitalWrite(IN2, LOW);
-  digitalWrite(IN3, LOW);
-  digitalWrite(IN4, LOW);
+  //digitalWrite(IN3, LOW);
+  //digitalWrite(IN4, LOW);
+  Serial.println("setup");
+  
 }
 
 void loop() {
-  setDirection();
-  delay(1000);
-  //changeSpeed();
+  //setDirection();
   //delay(1000);
+  Serial.println("0");
+  changeSpeed();
+  delay(1000);
 }
 
-int maxPower = 256 * 0.6;
+int maxPower = 256 ;
 
 void setDirection() {
   analogWrite(ENA, maxPower);
-  analogWrite(ENB, maxPower);
+  //analogWrite(ENB, maxPower);
 
   digitalWrite(IN1, HIGH);
   digitalWrite(IN2, LOW);
-  digitalWrite(IN3, HIGH);
-  digitalWrite(IN4, LOW);
+  //digitalWrite(IN3, HIGH);
+  //digitalWrite(IN4, LOW);
   delay(5000);
   
   digitalWrite(IN1, LOW);
   digitalWrite(IN2, LOW);
-  digitalWrite(IN3, LOW);
-  digitalWrite(IN4, LOW);
+  //digitalWrite(IN3, LOW);
+  //digitalWrite(IN4, LOW);
 }
 
 void changeSpeed() {
-  digitalWrite(IN1, LOW);
-  digitalWrite(IN2, HIGH);
+  Serial.println("1");
+  //analogWrite(ENA, maxPower);
+  digitalWrite(IN1, HIGH);
+  digitalWrite(IN2, LOW);
   
   for (int i = 0; i < maxPower; i++) {
     analogWrite(ENA, i);
@@ -253,4 +282,4 @@ void changeSpeed() {
   }
   digitalWrite(IN1, LOW);
   digitalWrite(IN2, LOW);
-}
+}*/
